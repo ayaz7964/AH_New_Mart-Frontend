@@ -49,6 +49,14 @@ const OrderDetails = () => {
                                                 <p className="font-medium">Phone Number</p>
                                                 <p>{order.shippingInfo.phoneNo}</p>
                                             </div>
+                                            {/* Payment Status Badge */}
+                                            {order.paymentInfo && (
+                                                <div className="mt-4">
+                                                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${order.paymentInfo.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : order.paymentInfo.status === 'PAID' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'}`}>
+                                                        Payment Status: {order.paymentInfo.status || 'N/A'}
+                                                    </span>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

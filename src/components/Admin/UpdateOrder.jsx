@@ -70,6 +70,28 @@ const UpdateOrder = () => {
                                             <p className="font-medium">Phone Number</p>
                                             <p>{order.shippingInfo.phoneNo}</p>
                                         </div>
+                                        {/* Payment Info for Admin Only */}
+                                        {order.paymentInfo && (
+                                            <div className="mt-4 p-3 bg-gray-50 rounded">
+                                                <h4 className="font-medium mb-2">Payment Information</h4>
+                                                <div className="flex flex-col gap-2">
+                                                    <span><b>Method:</b> {order.paymentMethod}</span>
+                                                    {order.paymentInfo.id && order.paymentInfo.id !== 'COD' && (
+                                                        <span><b>Transaction ID:</b> {order.paymentInfo.id}</span>
+                                                    )}
+                                                    {order.paymentInfo.status && (
+                                                        <span><b>Status:</b> {order.paymentInfo.status}</span>
+                                                    )}
+                                                    {/* Show proof image if available and not COD */}
+                                                    {order.paymentProof && order.paymentProof !== 'null' && order.paymentProof !== 'undefined' && (
+                                                        <div>
+                                                            <b>Proof Image:</b><br />
+                                                            <img src={order.paymentProof} alt="Payment Proof" style={{ maxWidth: '200px', marginTop: '8px', borderRadius: '6px' }} />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
@@ -100,6 +122,24 @@ const UpdateOrder = () => {
                                     <button type="submit" className="bg-primary-orange p-2.5 text-white font-medium rounded shadow hover:shadow-lg">
                                         Update
                                     </button>
+
+                                    {/* Mark Payment as Completed button for admin */}
+                                    {order.paymentInfo && order.paymentInfo.status !== 'COMPLETED' && (
+                                        <button
+                                            type="button"
+                                            className="bg-green-600 p-2.5 text-white font-medium rounded shadow hover:shadow-lg mt-2"
+                                            onClick={async () => {
+                                                // Call backend to update paymentInfo.status to COMPLETED
+                                                const formData = new FormData();
+                                                formData.set("paymentStatus", "COMPLETED");
+                                                await dispatch(updateOrder(params.id, formData));
+                                                enqueueSnackbar("Payment marked as completed!", { variant: "success" });
+                                                dispatch(getOrderDetails(params.id));
+                                            }}
+                                        >
+                                            Mark Payment as Completed
+                                        </button>
+                                    )}
                                 </form>
                             </div>
 

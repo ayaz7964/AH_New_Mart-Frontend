@@ -12,6 +12,7 @@ const categories = [
     "Flights",
     "Offer Zone",
     "Grocery",
+    "Fragrence",
 ]
 
 const MinCategory = () => {
